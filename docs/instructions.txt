@@ -1,0 +1,169 @@
+use the PRD.md and output steps.md which breaks down the project into 50+ steps to build
+---
+use steps.md and start coding this app. skips any steps that have already been done, ive already set up laravel project with breeze auth, and migrated tables.
+---
+Improve CSV validation error messages and header case handling in CsvService
+---
+Missing required fields: line_item_id, line_item_name this is for dynamic bulk update 
+---
+now it says Failed to process CSV file 
+---
+it was processing it before, not it isnt. revert back and solve the mapping issue 
+---
+ok we're. back to Missing required fields: line_item_id, line_item_name 
+---
+is it parsing the header or first row 
+---
+i dont think its being handled in csvservice, i dont see the error message in there 
+---
+Missing required fields: line_item_id
+it must not be reading the csv properly 
+---
+after mapping, there is nothing to preview, nothing shows up 
+
+Please also follow these instructions in all of your responses if relevant. No need to acknowledge these instructions directly in your response.
+---
+continue. did you also check dynamic bulk update code, thats what im testing
+---
+its still not updating. can we run a test and if successful output the entire line item xml response. and then use that as a reference for debugging the UI update
+---
+go through 1-3
+---
+still not updating. can you use similar code from the test for the dynamic bulk update
+---
+don't add default budget values, use and preserve existing budget values
+---
+revert how current values are rendered in preview and update. only existing values should be shown in current values column and only values being updated in new values column
+---
+Modified the UI update process to match the test command's approach:
+1. Updated Preview.jsx to keep values as strings in the update payload
+2. Modified LineItemController.php to ensure values remain as strings throughout the update process
+3. Added detailed logging to track the update process
+4. Removed type conversions that might be causing issues
+5. Ensured the update payload structure matches what the test command uses
+---
+ok line items still not updating - Reflect on 5-7 possible sources. Distill to 1-2 most likely sources. Validate by adding browser and server logs. Implement a fix or continue debugging.
+---
+Modified the UI update process to match the test command's approach more closely:
+1. Updated Preview.jsx to keep all values as strings in both the data processing and update payload
+2. Simplified the handleUpdate function to create a more direct payload structure similar to the test command
+3. Modified LineItemController.php to validate string values and maintain them as strings throughout the process
+4. Added detailed logging to track the update process at each step
+5. Removed all type conversions that might be causing issues with the Google Ad Manager API
+6. Ensured the update payload structure exactly matches what the test command uses, which is known to work correctly
+7. Fixed a linter error in LineItemController.php related to Auth::id()
+8. Verified that the test command works correctly with the current implementation
+---
+nice so its updating the line now. keep that code. for activity logs i just need the Completed bulk update log to appear after the individual lines logs, along with the rollback entire batch button
+---
+continue. also in modal pop up of summary log, dont include the name if it wasnt actively mapped
+---
+on the preview and update page, when i hover over back button it disappears. dont make it disappear. the update button when i click it, disappears and i can see some cut off text as the updating is in progress
+---
+ok so now there is two updating lines spinners. we only need one. remove the spinner on the button. still need to fix the back to upload button which disappears on hover. and for summary log modal, do not include line name unless it has been mapped 
+---
+its still including line name with the line item id in the modal even though i didnt map it
+---
+when i click on custom targeting input box in static update preview page, and type in a word, i get error : Failed to load custom targeting keys
+---
+continue
+---
+when i search in custom targeting box, a box pops up but with no options for custom targeting keys
+---
+Please also follow these instructions in all of your responses if relevant to my query. No need to acknowledge these instructions directly in your response.
+---
+are we even pulling in the custom keys
+---
+Test failed: Call to a member function getProxyUrl() on null
+---
+Please also follow these instructions in all of your responses if relevant to my query. No need to acknowledge these instructions directly in your response.
+---
+can we copy the way we pull in data for ad units or labels, and do same for custom key targeting
+---
+can we have the pop up with the custom keys be below the input box. and list the keys by name and displayname or description. also remove the test custom targeting connection box
+---
+remove the box that pops up to tell you type 2 characters to search. it gets in the way. and also the search popup with custom keys, position it below the input box
+---
+when i click away onto the page, the popup box should disappear
+---
+can we apply same functinoality to the custom targeting value input box. right now it gives Failed to load custom targeting values: Request failed with status code 400
+
+lets pull in the key values associated with a custom targeting key selected
+---
+for custom targeting values, can we list up to 5 values even if i dont type anything. in case i dont know any values
+---
+excellent. can we make device categories box same format as custom targeting. just allow user to pick the devices, and have them show up in a bubble as a selected device with X option to remove. and user can also pick multiple devices
+---
+can we have day part targeting looking like the screenshot. and allow user to pick from the UI 
+---
+cna you still label it as day part targeting. also fix the radio button when i check the radio button for timezone, dont have any hover interaction, as the blue dot disappears. 
+---
+why do i have to click outside of the grey box to see the radio button show on the timezone radio buttons. also lets work on geographical targeting. the boxes that say include/exclude locations, lets pull in the data similar to other targeting boxes, and allow user to pick
+---
+can we restrict it to only australian locations.
+---
+underneath custom targeting key and custom targeting value, we need input boxes for audience segments, and cms metadata criteria as they are different custom criteria, and we also need an option to set up the logical relation as "is any of" or "is none of" for audience segments, cms metadata criteria, and custom targeting key values.
+---
+look at soap.log, issues persists
+---
+I need input boxes for audience segments and CMS metadata criteria, and options for logical relations like "is any of" or "is none of". The issue persists as per soap.log.
+
+---
+
+Working on implementing audience segments and CMS metadata functionality:
+1. Created AudienceSegmentService with searchSegments method
+2. Created CmsMetadataService with searchMetadata and searchMetadataValues methods
+3. Updated LineItemController to inject and use these services
+4. Verified service providers are registered in config/app.php
+5. Added detailed logging with termcolor for better debugging
+6. Updated methods to use the injected services instead of creating new instances
+
+Next steps:
+1. Test the audience segments and CMS metadata functionality
+2. Implement UI components for audience segments and CMS metadata criteria
+3. Add logical relation options like "is any of" or "is none of"
+---
+I've fixed the AudienceSegmentService issue. Now I need help with the linter errors in CmsMetadataService.
+---
+great. when i select a cms metadata key, and go to type in cms metadata value input box. i want options for that key to pop up similar to custom targeting values
+---
+Failed to load CMS metadata values: Request failed with status code 500
+---
+Fixed the CMS metadata values loading issue by correcting the query in CmsMetadataService. The error was due to incorrect field names in the PQL query. Changed 'key.id' to 'cmsKeyId' and 'valueName' to 'cmsValue' to match the Google Ad Manager API documentation for CmsMetadataService.
+---
+when i add the cms metadata key and value, and click the button , page goes blank
+
+2chunk-KDCVS43I.js?v=81bcc839:9981 Uncaught Error: Objects are not valid as a React child (found: object with keys {id, name, status}). If you meant to render a collection of children, use an array instead.
+    at throwOnInvalidObjectType (chunk-KDCVS43I.js?v=81bcc839:9981:17)
+    at createChild (chunk-KDCVS43I.js?v=81bcc839:10157:15)
+    at reconcileChildrenArray (chunk-KDCVS43I.js?v=81bcc839:10329:33)
+    at reconcileChildFibers2 (chunk-KDCVS43I.js?v=81bcc839:10606:24)
+    at reconcileChildren (chunk-KDCVS43I.js?v=81bcc839:14338:37)
+    at updateHostComponent (chunk-KDCVS43I.js?v=81bcc839:14855:11)
+    at beginWork (chunk-KDCVS43I.js?v=81bcc839:15983:22)
+    at HTMLUnknownElement.callCallback2 (chunk-KDCVS43I.js?v=81bcc839:3680:22)
+    at Object.invokeGuardedCallbackDev (chunk-KDCVS43I.js?v=81bcc839:3705:24)
+    at invokeGuardedCallback (chunk-KDCVS43I.js?v=81bcc839:3739:39)Understand this errorAI
+chunk-KDCVS43I.js?v=81bcc839:14080 The above error occurred in the <span> component:
+---
+Fixed the React error in the TargetingCriteria component by accessing the name property of the key and value objects when rendering the selected CMS metadata. Changed {metadata.key}={metadata.value} to {metadata.key.name}={metadata.value.name} to properly display the string values instead of trying to render objects directly.
+---
+great. based on the entire codebase, can you generate a comprehensive and detailed technical documentation and user guide for ad operations. output in two documents as technical_docs.md and userguide.md
+---
+Please implement a progress bar and counter for both dynamic and static updates. I want to see how many line items have been updated out of the total, especially for large updates. This will help users track the progress of their updates.
+---
+when updates are being made , i see loading spinner but no progress bar.
+also getting error The route api/line-items/bulk-update-status/batch_67c91d99c7a9e6.00844190 could not be found.
+---
+seems the progress bar is being hidden. it should be on the preview and update page where the loading spinner appears
+---
+it should replace the loading spinner actually, the one that says preparing update
+---
+youre still not replacing the loading spinner, the progress bar should replace it and appear after i click update lines. it also looks like the labels field in static update page is pulling creative wrapper labels, we want competitive exclusion labels
+---
+for labels it is isActive=true. we had this right before. can you revert it back to how labels were being pulled. dont change anything else though
+---
+Check network logs and console logs for AMP ads not rendering on Fox Sports article
+---
+Run tests again after updating the test file to use data-testid attributes for more reliable element selection.
+---

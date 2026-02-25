@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .btn-outline {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        background-color: transparent !important;
+        border: 1px solid currentColor !important;
+        border-color: currentColor !important;
+        box-shadow: none !important;
+    }
+    
+    .btn-outline:hover {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        background-color: hsl(var(--b2, 0 0% 90%)) !important;
+        color: hsl(var(--bc, 0 0% 20%)) !important;
+        border: 1px solid currentColor !important;
+        border-color: currentColor !important;
+        box-shadow: none !important;
+    }
+
+    /* Force visibility for all states */
+    .btn-outline:hover,
+    .btn-outline:active,
+    .btn-outline:focus,
+    .btn-outline:disabled {
+        opacity: 1 !important;
+        visibility: visible !important;
+        border: 1px solid currentColor !important;
+        border-color: currentColor !important;
+        box-shadow: none !important;
+    }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Custom styles for DaisyUI */
+.btn-primary {
+    @apply text-white;
+}
+
+.table {
+    @apply w-full table-auto;
+}
+
+.table th {
+    @apply px-4 py-2 text-left bg-gray-50;
+}
+
+.table td {
+    @apply px-4 py-2 border-t;
+}
+
+.table tr:hover {
+    @apply bg-gray-50;
+}
+
+/* Loading animation */
+.loading-animation {
+    @apply flex flex-col items-center justify-center;
+}
+
+.loading-animation .animate-spin {
+    @apply border-t-2 border-primary;
+}
