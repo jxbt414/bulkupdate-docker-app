@@ -1,0 +1,71 @@
+# Git
+  .git
+  .gitignore
+  .gitattributes
+
+  # Docker
+  Dockerfile
+  docker-compose.yml
+  docker-compose*.yml
+  .docker
+  .dockerignore
+
+  # IDE
+  .idea
+  .vscode
+  *.swp
+  *.swo
+
+  # Dependencies (rebuilt in container)
+  /vendor
+  /node_modules
+
+  # Environment files
+  .env
+  .env.*
+  !.env.example
+
+  # Laravel generated files
+  /storage/*.key
+  /storage/logs/*
+  /storage/framework/cache/*
+  /storage/framework/sessions/*
+  /storage/framework/views/*
+  /bootstrap/cache/*
+
+  # Testing
+  /coverage
+  .phpunit.result.cache
+  phpunit.xml
+
+  # Build artifacts
+  /public/hot
+  /public/storage
+  /public/build
+  /public/mix-manifest.json
+
+  # Frontend source (if building in separate stage)
+  /resources/js
+  /resources/css
+  /resources/sass
+  *.map
+
+  # Documentation
+  README.md
+  CHANGELOG.md
+  LICENSE
+  /docs
+
+  # CI/CD
+  .github
+  .gitlab-ci.yml
+  .travis.yml
+  Jenkinsfile
+
+  # Misc
+  *.log
+  *.cache
+  .DS_Store
+  Thumbs.db
+  npm-debug.log
+  yarn-error.log

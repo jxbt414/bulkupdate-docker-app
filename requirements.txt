@@ -1,0 +1,16 @@
+# Google Ad Manager API
+google/ads-api
+google/auth
+
+# Laravel
+laravel/framework
+laravel/inertia
+laravel/sanctum
+laravel/tinker
+
+# Frontend
+@inertiajs/vue3
+vue
+tailwindcss
+daisyui
+anime.js 

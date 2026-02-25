@@ -1,0 +1,303 @@
+- Project Title: Google Ad Manager Bulk Update Tool
+- Functional Modules: CSV Upload, CSV Parsing, Field Mapping, API Integration, Error Handling, Rollback, and Logging
+- Backend Framework: Laravel; Frontend: React with DaisyUI, Tailwind CSS, and anime.js
+- Robust error handling using try/catch blocks with descriptive prints
+- All file operations to use with open encoding="utf-8" along with termcolor printing for status updates
+- Uses system environment variables for API keys (os.getenv) and updates requirements.txt without version numbers
+- Follows a structured, modular, and separation-of-concerns approach
+- Incorporates detailed logging, user-friendly dashboard, and rollback features
+
+Progress Update:
+- Created core models: LineItem, Log, and Rollback
+- Implemented CsvService for file upload and parsing
+- Created GoogleAdManagerService for API interactions
+- Built LineItemController with upload, update, and rollback endpoints
+- Developed main Dashboard component with CSV upload functionality
+- Added DaisyUI and anime.js for enhanced UI/UX
+- Implemented real-time status updates and animations for user actions 
+
+Latest Updates:
+- Modified the geographical targeting functionality to restrict location search to only Australian locations
+- Updated the searchLocations method in GoogleAdManagerService to filter by country code 'AU'
+- Improved search efficiency by limiting results to relevant Australian locations only
+- Enhanced CSV validation in CsvService with improved error messages
+- Added case-insensitive header validation while preserving original header case
+- Improved row-level validation with specific error messages
+- Added detailed feedback for missing or invalid headers
+- Enhanced numeric field validation for budget and priority fields
+- Fixed an issue with the CSV upload process where priority and impression_goals values from the CSV file were not being preserved and used in the update process. The StaticUpdate component now properly extracts these values from the CSV and includes them in the update payload.
+- Updated the handleFileUpload function to preserve priority and impression_goals values from the CSV when they exist.
+- Updated the handleSubmit function to use the values from the selectedItems array when they exist, falling back to the form values.
+- Updated the LineItemTable component to properly display the values from the CSV.
+- Fixed an issue with the dynamic bulk update process where priority and impression_goals values from the CSV file were not being properly converted to integers. Updated the Preview component to properly handle numeric values.
+- Updated the handleUpdate function in the Preview component to ensure numeric values are properly converted when sending the update payload.
+- Updated the mapFields method in the LineItemController to properly handle numeric values when mapping CSV data.
+- Added additional logging to help debug the mapping process.
+- Modified the dynamic bulk update process to preserve existing budget values instead of adding a default budget value of '23'.
+- Updated the `handleUpdate` function in `Preview.jsx` to only include budget values if they exist in the mapped data.
+- Removed the hardcoded default budget value to ensure that only actual changes are sent in the update payload.
+- Improved logging to track which fields are being updated for each line item.
+- Updated the LineItemTable component to display values more clearly in the preview and update screens.
+- Updated the "Current Values" column to show only the original values from the line items.
+- Updated the "New Values" column to show only the values that will be updated.
+- Enhanced the formatting of numeric values (budget, priority, impression_goals) to ensure they're displayed consistently.
+- Modified the UI update process to match the test command's approach by keeping values as strings throughout the process.
+- Updated Preview.jsx to ensure values are passed as strings in the update payload, similar to how the test command handles them.
+- Modified LineItemController.php to ensure values remain as strings throughout the update process, avoiding type conversions that might cause issues.
+- Added detailed logging to track the update process and help with debugging.
+- Ensured the update payload structure in the UI matches what the test command uses, which is known to work correctly.
+- Simplified the handleUpdate function in Preview.jsx to create a more direct payload structure similar to the test command.
+- Fixed a linter error in LineItemController.php related to Auth::id().
+- Verified that the test command works correctly with the current implementation.
+- Added a summary log entry after bulk updates to show the overall results of the update process.
+- Enhanced the Logs.jsx component to highlight summary logs and display the "Rollback entire batch" button.
+- Improved the organization of logs by grouping them by batch ID for better readability.
+- Added visual distinction for summary logs with a border to make them stand out in the logs list.
+- Fixed an issue with the data column in the logs table by creating a migration to change its type from text to json.
+- Updated the handleShowDetails function in Logs.jsx to handle log data directly without parsing it, since the data is now properly cast to an array by Laravel.
+- Modified the LineItemDetailsModal component to not include the name column if it wasn't actively mapped in the CSV.
+- Fixed UI issues on the Preview and Update page where buttons would disappear on hover or during loading states.
+- Enhanced the Back button with a minimum width to prevent it from disappearing on hover.
+- Improved the Update button with better loading state handling to prevent text cutoff during updates.
+- Updated the LoadingSpinner component to be more customizable with size options and optional text display.
+- Enhanced the loading indicator section with better styling and visibility during updates.
+- Removed duplicate loading spinner from the Update button to avoid redundancy.
+- Added hover:bg-base-200 class to the Back button to ensure it remains visible on hover.
+- Improved the LineItemDetailsModal component to only show the Name column when line_item_name has been actively mapped with non-empty values.
+- Fixed the labels query in the `getAvailableLabels` method to use `isActive=true` instead of `status = 'ACTIVE'` to correctly fetch competitive exclusion labels from Google Ad Manager.
+- Updated test file to use data-testid attributes for more reliable element selection
+- Fixed React import issues in Logs.jsx and LoadingSpinner.jsx components
+- Improved filtering functionality for different log types
+- Enhanced log display with detailed information about successful and failed items
+- Added proper error handling and loading states
+- Implemented CSV export functionality for both regular logs and error logs
+- All tests are now passing successfully
+
+# Google Ad Manager Bulk Update Tool - Project Summary
+
+## Core Functionality
+- A Laravel-based web application for bulk updating Google Ad Manager line items
+- Supports both dynamic (CSV-based) and static (form-based) updates
+- Integrates with Google Ad Manager API to fetch and update line item data
+- Provides activity logging and rollback capabilities
+
+## Current Implementation Status
+- CSV upload and validation for dynamic updates is working
+- Line item preview and update functionality is operational
+- Custom targeting functionality has been enhanced with improved error handling and UI
+- Activity logging is implemented with modal display
+- Test endpoint added for diagnosing custom targeting key issues
+
+## Recent Improvements
+- Enhanced error handling throughout the application
+- Added retry functionality for failed requests
+- Improved logging for better debugging
+- Enhanced UI for custom targeting with more space for input and better display of options
+- Fixed issues with the update process to ensure values are properly formatted
+- Added test endpoints to diagnose API connectivity issues
+- Increased the limit of custom targeting keys returned from 10 to 20
+- Improved the SearchableCustomTargeting component:
+  - Removed the test connection box for a cleaner interface
+  - Enhanced the display of custom targeting keys to show both name and display name
+  - Positioned dropdowns properly below the input boxes using absolute positioning
+  - Improved the overall layout and user experience
+  - Removed the "Type at least 2 characters to search" message that was getting in the way
+  - Only showing dropdown when there are actual results to display
+  - Added click-outside functionality to close dropdowns when clicking elsewhere on the page
+  - Fixed custom targeting values loading by updating the backend to accept key_id parameter
+  - Added pre-loading of values when a key is selected for better user experience
+  - Improved error handling for custom targeting values with consistent response format
+  - Increased the limit of custom targeting values from 10 to 20 for more options
+  - Modified the component to show values automatically when a key is selected, without requiring typing
+  - Removed the minimum character requirement for value search to show all available values
+- Created a new DeviceCategorySelector component:
+  - Implemented a similar UI to the SearchableCustomTargeting component
+  - Added support for selecting multiple device categories
+  - Displayed selected devices as bubbles with an X to remove
+  - Added click-outside functionality to close the dropdown
+  - Integrated with the StaticUpdate component for a consistent user experience
+- Created a new DayPartSelector component:
+  - Implemented a UI that matches the Google Ad Manager interface
+  - Added support for selecting days of the week with circular toggle buttons
+  - Included time range selection with start and end time dropdowns
+  - Added options for publisher's time zone or user's time zone
+  - Implemented "Don't run on these days" functionality
+  - Displayed selected day parts as summary items with remove option
+  - Added ability to add multiple time periods
+  - Integrated with the StaticUpdate component for a consistent user experience
+  - Added a clear "Day Part Targeting" label at the top of the component
+  - Fixed radio button hover issue to ensure the blue dot remains visible during hover
+- Created a new SearchableGeoTargeting component:
+  - Implemented a similar UI to the SearchableAdUnits component
+  - Added support for searching and selecting geographical locations
+  - Displayed selected locations as bubbles with an X to remove
+  - Added click-outside functionality to close the dropdown
+  - Integrated with the StaticUpdate component for both include and exclude location targeting
+  - Used the geotargets CSV file to provide location data for searching
+  - Added backend support with a new endpoint for location search
+
+## Current Issues
+- Custom targeting search functionality had issues displaying options
+- Added diagnostic tools to help identify the root cause
+- UI improvements made to the custom targeting component to provide more space and better display
+
+## Next Steps
+- Continue improving error handling and user feedback
+- Enhance the custom targeting functionality by adopting patterns from working components
+- Consider implementing caching for frequently accessed data
+- Add more comprehensive testing
+
+# Bulk Update Tool for Google Ad Manager Line Items
+
+This tool allows users to bulk update line items in Google Ad Manager through a user-friendly web interface. The system provides the following functionality:
+
+- **CSV Upload**: Users can upload a CSV file containing line item updates
+- **Field Mapping**: Users can map CSV columns to system fields
+- **Preview**: The system displays current values and new values for each line item
+- **Selection**: Users can select which line items to update
+- **Update**: The system applies updates to selected line items via the Google Ad Manager API
+- **Logging**: The system logs all updates and provides rollback capabilities
+
+## Technical Details
+
+- **Backend**: Laravel PHP
+- **Frontend**: React with DaisyUI and Tailwind CSS
+- **API Integration**: Google Ad Manager API v202411
+- **Data Processing**: CSV parsing, validation, and transformation
+- **Error Handling**: Robust error handling with detailed logging
+- **Security**: Authentication and authorization
+
+## Key Features
+
+- **CSV Validation**: Validates CSV files for required fields and proper formatting
+- **Field Mapping**: Maps CSV columns to system fields with case-insensitive matching
+- **Preview Generation**: Shows current values and new values for each line item
+- **Bulk Update**: Updates multiple line items at once
+- **Rollback**: Allows rolling back updates if needed
+- **Logging**: Tracks all updates and errors
+- **User Interface**: Clean, responsive UI with progress tracking
+
+## Recent Updates
+
+- Modified the dynamic bulk update process to preserve existing budget values instead of adding a default budget value of '23'.
+- Updated the `handleUpdate` function in `Preview.jsx` to only include budget values if they exist in the mapped data.
+- Removed the hardcoded default budget value to ensure that only actual changes are sent in the update payload.
+- Improved logging to track which fields are being updated for each line item.
+- Updated the LineItemTable component to display values more clearly in the preview and update screens.
+- Updated the "Current Values" column to show only the original values from the line items.
+- Updated the "New Values" column to show only the values that will be updated.
+- Enhanced the formatting of numeric values (budget, priority, impression_goals) to ensure they're displayed consistently.
+- Modified the UI update process to match the test command's approach by keeping values as strings throughout the process.
+- Updated Preview.jsx to ensure values are passed as strings in the update payload, similar to how the test command handles them.
+- Modified LineItemController.php to ensure values remain as strings throughout the update process, avoiding type conversions that might cause issues.
+- Added detailed logging to track the update process and help with debugging.
+- Ensured the update payload structure in the UI matches what the test command uses, which is known to work correctly.
+- Simplified the handleUpdate function in Preview.jsx to create a more direct payload structure similar to the test command.
+- Fixed a linter error in LineItemController.php related to Auth::id().
+- Verified that the test command works correctly with the current implementation.
+- Added a summary log entry after bulk updates to show the overall results of the update process.
+- Enhanced the Logs.jsx component to highlight summary logs and display the "Rollback entire batch" button.
+- Improved the organization of logs by grouping them by batch ID for better readability.
+- Added visual distinction for summary logs with a border to make them stand out in the logs list.
+- Fixed an issue with the data column in the logs table by creating a migration to change its type from text to json.
+- Updated the handleShowDetails function in Logs.jsx to handle log data directly without parsing it, since the data is now properly cast to an array by Laravel.
+- Modified the LineItemDetailsModal component to not include the name column if it wasn't actively mapped in the CSV.
+
+Project Summary: Bulk Update Tool for Google Ad Manager
+
+- Fixed issue with custom targeting input box in static update preview page
+  - Enhanced error handling in CustomTargetingService to properly catch and log exceptions
+  - Updated LineItemController to provide more detailed error responses
+  - Improved SearchableCustomTargeting component to better handle errors and display informative messages
+  - Added retry functionality for failed custom targeting key/value requests
+  - Ensured GoogleAdManagerService properly initializes the session for CustomTargetingService
+  - Added detailed logging throughout the custom targeting flow to help diagnose issues
+  - Improved session initialization in GoogleAdManagerService to attempt recovery when session is not initialized
+  - Added more robust error handling and user feedback in the UI
+
+- Added enhanced targeting criteria functionality:
+  * Created new TargetingCriteria component that combines:
+    - Custom targeting with key-value pairs
+    - Audience segments selection
+    - CMS metadata criteria
+  * Added logical operators ("is any of" / "is none of") for each targeting type
+  * Implemented searchable dropdowns for all targeting options
+  * Added visual tags to display selected targeting criteria
+  * Integrated with the main form's state management and submission 
+
+- Investigated SOAP logs and Laravel logs for issues related to CMS metadata functionality
+- Discovered an error in the Laravel logs: "Failed to fetch CMS metadata keys: Function ("searchMetadata") is not a valid method for this service"
+- Researched the Google Ad Manager API documentation for CmsMetadataService
+- Found that the correct methods are `getCmsMetadataKeysByStatement` and `getCmsMetadataValuesByStatement` instead of `searchMetadata`
+- Updated the CmsMetadataService class to use the correct method names from the Google Ad Manager API 
+
+- Implemented AudienceSegmentService with searchSegments method to fetch audience segments from Google Ad Manager
+- Implemented CmsMetadataService with searchMetadata and searchMetadataValues methods to fetch CMS metadata keys and values
+- Updated LineItemController to inject and use these services instead of creating new instances
+- Added detailed logging with termcolor for better debugging
+- Verified service providers are registered in config/app.php
+- Next steps include testing the functionality and implementing UI components for audience segments and CMS metadata criteria with logical relation options 
+
+- Fixed issues with AudienceSegmentService and CmsMetadataService:
+  * Added missing PHP opening tags (<?php) to both service files
+  * Corrected method names in CmsMetadataService to match Google Ad Manager API documentation
+  * Updated method calls in CmsMetadataService to use getId() and getName() instead of incorrect method names
+  * Verified AudienceSegmentService functionality with a test script
+  * Successfully retrieved 50 audience segments from Google Ad Manager API
+  * Refreshed autoloader cache with composer dump-autoload to ensure classes are properly recognized
+  * Cleared Laravel application cache to ensure all recent changes are recognized
+  * Confirmed proper dependency injection in LineItemController
+  * Fixed PSR-4 compliance issues with the Color class namespace
+  * Created test scripts to verify service functionality and explore available methods 
+
+- Enhanced CMS metadata value selection functionality:
+  * Improved the loadCmsMetadataValues function to automatically show dropdown when values are loaded
+  * Added onFocus handler to load values when input is focused, even without typing
+  * Updated the CMS Metadata Key dropdown to automatically load values when a key is selected
+  * Added console logging for better debugging of CMS metadata value loading
+  * Enhanced the searchMetadataValues method in CmsMetadataService to handle empty query strings better
+  * Added more detailed logging in the CmsMetadataService to track query execution
+  * Ensured the dropdown for CMS metadata values appears below the input box with proper styling
+  * Made the CMS metadata value selection experience consistent with custom targeting value selection 
+
+- Fixed CMS metadata values loading issue:
+  * Identified a 500 error when trying to load CMS metadata values
+  * Found the issue in the SOAP logs showing PublisherQueryLanguageContextError.UNEXECUTABLE errors
+  * Researched the Google Ad Manager API documentation for correct field names
+  * Updated the CmsMetadataService.php file to use 'cmsKeyId' instead of 'key.id' in the query
+  * Changed 'valueName' to 'cmsValue' in the query to match the API documentation
+  * Added detailed logging to track the query construction and execution
+  * Verified the fix by checking the SOAP logs for successful requests 
+
+- Fixed React rendering error in CMS metadata component:
+  * Identified an error where objects were being rendered directly as React children
+  * Found the issue in the TargetingCriteria component where metadata.key and metadata.value objects were being rendered directly
+  * Updated the component to access the name property of these objects: metadata.key.name and metadata.value.name
+  * This ensures that string values are rendered instead of objects, preventing the "Objects are not valid as a React child" error
+  * The fix allows users to successfully add CMS metadata criteria without the page going blank
+  * Improved the robustness of the component by ensuring proper data type handling 
+
+- Implemented progress bar and counter for both dynamic and static updates:
+  * Added real-time progress tracking for bulk updates to show how many line items have been updated out of the total
+  * Created a BulkUpdateProgress component that displays:
+    - Visual progress bar showing percentage of completed updates
+    - Counters for total, completed, and failed line items
+    - List of any failed items with error messages
+    - Timestamps for when the update started and completed
+  * Enhanced LineItemController to store progress information in the cache for real-time tracking
+  * Updated StaticUpdate and Preview components to show the progress bar after submitting updates
+  * Added ability to retry failed updates directly from the progress bar
+  * Improved user experience for large updates by providing clear visibility into the update process
+  * Implemented a completion callback to handle post-update actions like form reset and redirection 
+
+- Fixed an issue with the bulk update progress tracking where the progress bar was not displaying due to missing API routes:
+  * Added the missing routes for bulk update status and retry functionality in the web.php file
+  * Updated the BulkUpdateProgress component to use the correct API endpoints by removing the '/api' prefix from the URLs
+  * Fixed the handleRetry function to use the correct endpoint name for retrying failed updates
+  * Ensured proper integration between the backend cache-based progress tracking and the frontend progress display 
+
+- Fixed an issue where the progress bar was being hidden during updates:
+  * Updated the Preview.jsx and StaticUpdate.jsx components to only show the LoadingSpinner when loading is true and batchId is null
+  * Enhanced the LoadingSpinner component to accept a text prop for better user feedback
+  * Improved the loading state management to ensure the progress bar is visible when a batch update is in progress
+  * Added descriptive text to the loading spinner to indicate that the update is being prepared 

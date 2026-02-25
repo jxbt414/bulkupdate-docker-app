@@ -1,0 +1,238 @@
+/* Project Title */
+Google Ad Manager Bulk Update Tool
+
+/* Project Description */
+A web application for managing and updating line items in Google Ad Manager in bulk. The tool includes features for viewing activity logs, filtering logs by type, displaying detailed information about successful and failed updates, and exporting log data to CSV format.
+
+The project has been updated to fix an issue with the CSV upload process where priority and impression_goals values from the CSV file were not being preserved and used in the update process. The StaticUpdate component now properly extracts these values from the CSV and includes them in the update payload. This ensures that when users upload a CSV file with priority and impression_goals values, those values are correctly used when updating the line items.
+
+Additionally, the dynamic bulk update process has been fixed to properly handle numeric values like priority and impression_goals. The Preview component now converts these values to the appropriate types, and the handleUpdate function ensures they are properly formatted when sending the update payload. The mapFields method in the LineItemController has also been updated to properly handle numeric values when mapping CSV data.
+
+Recently, we've fixed an issue with the custom targeting input box in the static update preview page. The SearchableCustomTargeting component has been enhanced with better error handling and detailed logging to help diagnose issues. The backend services (CustomTargetingService and GoogleAdManagerService) have been updated to provide more robust error handling and session management. This ensures that users can properly search for and select custom targeting keys and values when configuring line item updates.
+
+## Special Instructions
+- Use data-testid attributes for reliable component testing
+- Implement proper error handling and loading states
+- Ensure React imports are properly configured in all components
+- Follow best practices for component organization and state management
+- Implement CSV export functionality for both regular logs and error logs
+
+## Current Issue
+The custom targeting search box is not displaying options for custom targeting keys when users type in the search box. An error message "Failed to load custom targeting keys" is displayed. This issue needs to be diagnosed and fixed to ensure proper functionality of the custom targeting feature.
+
+## Implementation Steps
+1. Set up the basic React application structure
+2. Create the Logs component for displaying activity logs
+3. Implement filtering functionality for different log types
+4. Add detailed view for successful and failed updates
+5. Implement CSV export functionality
+6. Add loading states and error handling
+7. Write comprehensive tests using Jest and React Testing Library
+8. Refactor components for better maintainability
+9. Add data-testid attributes for reliable testing
+10. Fix React import issues and ensure all tests pass
+
+## Technical Stack
+- Backend: Laravel PHP framework
+- Frontend: React with Inertia.js
+- UI: Tailwind CSS with DaisyUI components
+- API Integration: Google Ad Manager API
+- Authentication: Laravel's built-in authentication with Google OAuth
+
+## Process
+1. **Authentication**: Users log in to access the tool
+2. **Dashboard**: Users select between static or dynamic updates
+3. **Static Update**:
+   - Enter line item IDs or select from a list
+   - Configure update fields (budget, priority, targeting, etc.)
+   - Preview changes
+   - Submit updates
+   - View real-time progress with counters and progress bar
+   - Review results and logs
+4. **Dynamic Update (CSV)**:
+   - Upload CSV file with line item updates
+   - Map CSV columns to system fields
+   - Preview changes
+   - Select line items to update
+   - Submit updates
+   - View real-time progress with counters and progress bar
+   - Review results and logs
+5. **Targeting Criteria**:
+   - Configure custom targeting key-value pairs
+   - Set up audience segments
+   - Define CMS metadata criteria
+   - Configure geographical targeting
+   - Set device category targeting
+   - Define day part targeting
+6. **Activity Logs**:
+   - View history of updates
+   - See details of each update
+   - Perform rollback operations if needed
+7. **Rollback**:
+   - Revert changes for individual line items
+   - Revert entire batches of updates
+
+## Technical Details
+- Backend: Laravel PHP
+- Frontend: React with DaisyUI and Tailwind CSS
+- API Integration: Google Ad Manager API v202411
+- Data Processing: CSV parsing, validation, and transformation
+- Error Handling: Robust error handling with detailed logging
+- Security: Authentication and authorization
+- Logging: Comprehensive logging system with rollback capabilities
+
+/* Implementation Steps */
+1. Set up Laravel project with Breeze authentication ✓
+2. Create database migrations ✓
+3. Implement CSV upload and validation ✓
+4. Add Google Ad Manager integration ✓
+5. Create bulk update processing system ✓
+6. Implement progress tracking ✓
+7. Add error handling and retry functionality ✓
+8. Enhance CSV validation with improved error messages ✓
+9. Add real-time status updates and animations ✓
+10. Fix data column type in logs table ✓
+11. Improve log details display in the UI ✓
+
+/* Current Focus */
+- Resolving issues with custom targeting key search functionality
+- Enhancing the UI for better user experience
+- Improving error handling and diagnostic capabilities
+- Adopting successful patterns from working components to fix problematic ones
+
+# Next Steps
+- Test the new diagnostic tools to identify the root cause of the custom targeting issue
+- Review server logs for any authentication or API connection problems
+- Check if the Google Ad Manager API credentials are correctly configured
+- Verify that the network code and application name are correct
+- Consider implementing caching for custom targeting keys to improve performance 
+
+# Implementation Process
+1. Set up Laravel project with authentication using Breeze
+2. Create database migrations for necessary tables
+3. Implement Google Ad Manager API integration services
+4. Develop CSV upload and validation functionality
+5. Create line item preview and update interfaces
+6. Implement custom targeting functionality
+7. Add activity logging and rollback capabilities
+8. Enhance error handling and user feedback
+9. Create diagnostic tools for troubleshooting
+10. Optimize performance and user experience
+11. Implement comprehensive testing
+
+# Current Focus
+- Resolving issues with custom targeting key search functionality
+- Enhancing the UI for better user experience
+- Improving error handling and diagnostic capabilities
+- Adopting successful patterns from working components to fix problematic ones
+
+# Recent Updates
+- Increased the limit of custom targeting keys returned from 10 to 20 to provide more options
+- Enhanced the SearchableCustomTargeting component UI:
+  - Removed the test connection box for a cleaner interface
+  - Improved the display of custom targeting keys to show both name and display name
+  - Positioned dropdowns properly below the input boxes using absolute positioning
+  - Enhanced the layout for better usability on different screen sizes
+  - Added better error handling and retry functionality
+  - Removed the "Type at least 2 characters to search" message that was getting in the way
+  - Only showing dropdown when there are actual results to display
+  - Added click-outside functionality to close dropdowns when clicking elsewhere on the page
+  - Fixed custom targeting values loading by updating the backend to accept key_id parameter
+  - Added pre-loading of values when a key is selected for better user experience
+  - Improved error handling for custom targeting values with consistent response format
+  - Increased the limit of custom targeting values from 10 to 20 for more options
+  - Modified the component to show values automatically when a key is selected, without requiring typing
+  - Removed the minimum character requirement for value search to show all available values
+- Created a new DeviceCategorySelector component:
+  - Implemented a similar UI to the SearchableCustomTargeting component
+  - Added support for selecting multiple device categories
+  - Displayed selected devices as bubbles with an X to remove
+  - Added click-outside functionality to close the dropdown
+  - Integrated with the StaticUpdate component for a consistent user experience
+- Created a new DayPartSelector component:
+  - Implemented a UI that matches the Google Ad Manager interface
+  - Added support for selecting days of the week with circular toggle buttons
+  - Included time range selection with start and end time dropdowns
+  - Added options for publisher's time zone or user's time zone
+  - Implemented "Don't run on these days" functionality
+  - Displayed selected day parts as summary items with remove option
+  - Added ability to add multiple time periods
+  - Integrated with the StaticUpdate component for a consistent user experience
+  - Added a clear "Day Part Targeting" label at the top of the component
+  - Fixed radio button hover issue to ensure the blue dot remains visible during hover
+- Created a new SearchableGeoTargeting component:
+  - Implemented a similar UI to the SearchableAdUnits component
+  - Added support for searching and selecting geographical locations
+  - Displayed selected locations as bubbles with an X to remove
+  - Added click-outside functionality to close the dropdown
+  - Integrated with the StaticUpdate component for both include and exclude location targeting
+  - Used the geotargets CSV file to provide location data for searching
+  - Added backend support with a new endpoint for location search
+- Fixed issues with the custom targeting key search functionality
+- Improved the overall user experience with clearer labels and more intuitive interactions
+
+Recent Updates:
+- Geographical targeting has been restricted to Australian locations only
+- The searchLocations method now filters results based on country code 'AU'
+- Search results are limited to 20 relevant Australian locations per query
+- Improved search efficiency by adding country-specific filtering
+
+- Audience Segments and CMS Metadata Integration: The application now includes functionality to fetch and use audience segments and CMS metadata from Google Ad Manager. This includes services for searching and retrieving these entities, as well as UI components for selecting them with logical relation options like "is any of" or "is none of".
+
+Steps to implement:
+1. Create dedicated service classes for AudienceSegmentService and CmsMetadataService
+2. Register these services in the application's service container
+3. Update the LineItemController to use these services
+4. Implement UI components for selecting audience segments and CMS metadata
+5. Add logical relation options for criteria selection 
+
+Recent Progress:
+- Fixed critical issues with AudienceSegmentService and CmsMetadataService:
+  * Added missing PHP opening tags (<?php) to both service files, which was causing class loading failures
+  * Corrected method names in CmsMetadataService to match Google Ad Manager API documentation
+  * Updated method calls in CmsMetadataService to use getId() and getName() instead of incorrect method names
+  * Verified AudienceSegmentService functionality with a test script that successfully retrieved 50 audience segments
+  * Refreshed autoloader cache with composer dump-autoload to ensure classes are properly recognized
+  * Cleared Laravel application cache to ensure all recent changes are recognized
+  * Fixed PSR-4 compliance issues with the Color class namespace
+  * Created test scripts to verify service functionality and explore available methods
+  * Confirmed proper dependency injection in LineItemController
+
+Next Steps:
+- Complete implementation of UI components for audience segments and CMS metadata selection
+- Integrate the logical relation options ("is any of"/"is none of") for all targeting criteria
+- Implement comprehensive testing of the targeting criteria functionality
+- Enhance error handling and user feedback for targeting criteria selection
+- Update documentation to reflect the new targeting criteria options 
+
+Latest Enhancement:
+- Enhanced CMS metadata value selection functionality to match custom targeting value selection experience
+- Improved the loadCmsMetadataValues function to automatically show dropdown when values are loaded
+- Added onFocus handler to load values when input is focused, even without typing
+- Updated the CMS Metadata Key dropdown to automatically load values when a key is selected
+- Enhanced the searchMetadataValues method in CmsMetadataService to handle empty query strings better
+- Added more detailed logging in the CmsMetadataService to track query execution
+
+Latest Fix:
+- Fixed CMS metadata values loading issue that was causing a 500 error
+- Identified the issue through SOAP logs showing PublisherQueryLanguageContextError.UNEXECUTABLE errors
+- Researched the Google Ad Manager API documentation for correct field names in PQL queries
+- Updated the CmsMetadataService.php file to use 'cmsKeyId' instead of 'key.id' in the query
+- Changed 'valueName' to 'cmsValue' in the query to match the API documentation
+- Added detailed logging to track the query construction and execution
+- Verified the fix by checking the SOAP logs for successful requests
+- This fix ensures that CMS metadata values properly load when a user selects a CMS metadata key
+
+1. Use termcolor printing for every step to inform the user when using with open with encoding="utf-8"
+2. Place major variables as ALL CAPS at the top of scripts
+3. Don't change model names like gpt-4o, gpt-4o-mini, o1-mini, or o1-preview
+4. Use try-except blocks with descriptive error messages
+5. Implement separation of concerns in all project components
+6. Use system variables with os.getenv for API keys, not .env files
+7. Create and update requirements.txt without version numbers
+8. Use chat.completions.create endpoint, not chatcompletions
+9. For web-related components, use colorful DaisyUI, Tailwind CSS, and anime.js
+10. Add waiting animations for user interactions
+11. Write each user prompt to instructions.txt with separators
+12. Maintain a running bullet point summary in summary.txt
+13. Create and update project_description.txt with each user message 
