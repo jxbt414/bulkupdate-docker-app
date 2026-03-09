@@ -22,3 +22,5 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+deploy_key
+deploy_key.pub

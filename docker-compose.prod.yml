@@ -1,0 +1,96 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bulkupdate-app
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - .env:/var/www/html/.env
+      - app_storage:/var/www/html/storage
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      DB_CONNECTION: mysql
+      DB_HOST: bulkupdate-mysql
+      DB_PORT: 3306
+      DB_DATABASE: bulkupdate
+      DB_USERNAME: bulkupdate
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+      REDIS_HOST: bulkupdate-redis
+      CACHE_DRIVER: redis
+      SESSION_DRIVER: redis
+      QUEUE_CONNECTION: redis
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - bulkupdate
+
+  mysql:
+    image: mysql:8.0
+    container_name: bulkupdate-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
+      MYSQL_DATABASE: bulkupdate
+      MYSQL_USER: bulkupdate
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bulkupdate
+
+  redis:
+    image: redis:alpine
+    container_name: bulkupdate-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - bulkupdate
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bulkupdate-queue
+    restart: unless-stopped
+    command: php artisan queue:work --sleep=3 --tries=3 --max-time=3600
+    volumes:
+      - .env:/var/www/html/.env
+      - app_storage:/var/www/html/storage
+    environment:
+      APP_ENV: production
+      DB_CONNECTION: mysql
+      DB_HOST: bulkupdate-mysql
+      DB_PORT: 3306
+      DB_DATABASE: bulkupdate
+      DB_USERNAME: bulkupdate
+      DB_PASSWORD: ${DB_PASSWORD:-secret}
+      REDIS_HOST: bulkupdate-redis
+      QUEUE_CONNECTION: redis
+    depends_on:
+      - app
+      - mysql
+      - redis
+    networks:
+      - bulkupdate
+
+volumes:
+  mysql_data:
+  redis_data:
+  app_storage:
+
+networks:
+  bulkupdate:
+    driver: bridge
